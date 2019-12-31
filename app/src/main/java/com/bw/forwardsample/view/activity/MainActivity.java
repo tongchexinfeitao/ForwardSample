@@ -1,24 +1,29 @@
-package com.bw.forwardsample;
+package com.bw.forwardsample.view.activity;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bw.forwardsample.util.NetUtil;
+import com.bw.forwardsample.R;
+import com.bw.forwardsample.base.BaseActivity;
+import com.bw.forwardsample.base.BasePresenter;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
+
 
     @BindView(R.id.tv_qr_content)
     TextView mTvQrContent;
@@ -30,17 +35,32 @@ public class MainActivity extends AppCompatActivity {
     ImageView mIvQrPicture;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        // TODO: 2019/12/27 ButterKnife必须绑定  相当于findViewById();
-        ButterKnife.bind(this);
-
-        // TODO: 2019/12/27 必须初始化二维码库
-        CodeUtils.init(this);
+    protected void initData() {
 
 
+
+        Map<String, String> map = new HashMap<>();
+        map.put("phone", "15501186623");
+        map.put("pwd", "123456");
+
+        NetUtil.getInstance().getJsonPost("http://172.17.8.100/small/user/v1/login", map, new NetUtil.MyCallBack() {
+            @Override
+            public void onGetJson(String json) {
+
+                Toast.makeText(MainActivity.this, "成功" + json, Toast.LENGTH_SHORT).show();
+
+            }
+
+            @Override
+            public void onError(Throwable throwable) {
+                Toast.makeText(MainActivity.this, "失败" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
+
+            }
+        });
+    }
+
+    @Override
+    protected void initView() {
         mIvQrPicture.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -58,22 +78,16 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+    }
 
+    @Override
+    protected BasePresenter providePresenter() {
+        return null;
+    }
 
-        NetUtil.getInstance().getJsonGet("http://blog.zhaoliang5156.cn/api/student/clazzstudent.json", new NetUtil.MyCallBack() {
-            @Override
-            public void onGetJson(String json) {
-                Toast.makeText(MainActivity.this, "成功" + json, Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                Toast.makeText(MainActivity.this, "失败" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
+    @Override
+    protected int layoutId() {
+        return R.layout.activity_main;
     }
 
     @OnClick({R.id.tv_qr_content, R.id.btn_qr_camera, R.id.btn_qr_photos})
