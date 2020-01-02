@@ -61,8 +61,7 @@ dependencies {
     //二维码依赖之一
     implementation 'com.github.tongchexinfeitao:QRCodeLibrary:1.0'
 
-    //Okhttp依赖
-    implementation 'com.squareup.okhttp3:okhttp:3.9.0'
+
     //Okhttp日志拦截器
     implementation 'com.squareup.okhttp3:logging-interceptor:3.4.1'
 
@@ -74,5 +73,17 @@ dependencies {
 
     //greenDao的依赖之一
     implementation 'org.greenrobot:greendao:3.2.2'
+
+
+    //配置retrofit2.0     自带Ok和Gson，不需要另外依赖 Ok和 Gson
+    implementation 'com.squareup.retrofit2:retrofit:+'
+    //让retrofit支持Gson自动解析json
+    implementation 'com.squareup.retrofit2:converter-gson:+'
+    //配置支持Rxjava2
+    implementation 'com.squareup.retrofit2:adapter-rxjava2:+'
+
+    //Rxjava的依赖
+    implementation 'io.reactivex.rxjava2:rxjava:+'
+    implementation 'io.reactivex.rxjava2:rxandroid:+'
 
 }

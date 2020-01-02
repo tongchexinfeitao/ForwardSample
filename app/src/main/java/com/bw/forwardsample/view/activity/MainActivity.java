@@ -36,27 +36,6 @@ public class MainActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-
-
-
-        Map<String, String> map = new HashMap<>();
-        map.put("phone", "15501186623");
-        map.put("pwd", "123456");
-
-        NetUtil.getInstance().getJsonPost("http://172.17.8.100/small/user/v1/login", map, new NetUtil.MyCallBack() {
-            @Override
-            public void onGetJson(String json) {
-
-                Toast.makeText(MainActivity.this, "成功" + json, Toast.LENGTH_SHORT).show();
-
-            }
-
-            @Override
-            public void onError(Throwable throwable) {
-                Toast.makeText(MainActivity.this, "失败" + throwable.getMessage(), Toast.LENGTH_SHORT).show();
-
-            }
-        });
     }
 
     @Override
