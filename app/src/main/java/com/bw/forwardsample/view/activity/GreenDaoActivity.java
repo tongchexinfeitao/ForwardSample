@@ -6,7 +6,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import com.bw.forwardsample.R;
-import com.bw.forwardsample.bean.StudentBean;
+import com.bw.forwardsample.model.bean.StudentBean;
 import com.bw.forwardsample.database.DaoMaster;
 import com.bw.forwardsample.database.DaoSession;
 import com.bw.forwardsample.database.StudentBeanDao;

@@ -1,4 +1,4 @@
-package com.bw.forwardsample.bean;
+package com.bw.forwardsample.model.bean;
 
 import java.util.List;
 

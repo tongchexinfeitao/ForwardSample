@@ -1,33 +1,20 @@
 package com.bw.forwardsample.view.activity;
 
-import android.os.Bundle;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.bw.forwardsample.Api;
 import com.bw.forwardsample.R;
 import com.bw.forwardsample.base.BaseActivity;
 import com.bw.forwardsample.base.BasePresenter;
-import com.bw.forwardsample.bean.LoginBean;
-import com.bw.forwardsample.bean.ProductBean;
-import com.bw.forwardsample.bean.TestBean;
+import com.bw.forwardsample.model.bean.TestBean;
 import com.bw.forwardsample.util.NetUtil;
 
-import java.util.concurrent.TimeUnit;
-
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
-import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import okhttp3.OkHttpClient;
-import okhttp3.logging.HttpLoggingInterceptor;
-import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitActivity extends BaseActivity {
 

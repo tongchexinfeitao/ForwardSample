@@ -6,7 +6,7 @@ import android.widget.Toast;
 import com.bw.forwardsample.R;
 import com.bw.forwardsample.base.BaseActivity;
 import com.bw.forwardsample.base.BasePresenter;
-import com.bw.forwardsample.bean.Bean;
+import com.bw.forwardsample.model.bean.Bean;
 import com.uuzuche.lib_zxing.activity.CodeUtils;
 
 import org.greenrobot.eventbus.EventBus;

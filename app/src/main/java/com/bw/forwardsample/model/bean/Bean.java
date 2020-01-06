@@ -1,6 +1,4 @@
-package com.bw.forwardsample.bean;
-
-import org.greenrobot.greendao.annotation.Entity;
+package com.bw.forwardsample.model.bean;
 
 
 public class Bean {

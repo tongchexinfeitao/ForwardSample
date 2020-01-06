@@ -1,14 +1,15 @@
 package com.bw.forwardsample;
 
-import com.bw.forwardsample.bean.Bean;
-import com.bw.forwardsample.bean.LoginBean;
-import com.bw.forwardsample.bean.ProductBean;
-import com.bw.forwardsample.bean.TestBean;
+import com.bw.forwardsample.model.bean.CartBean;
+import com.bw.forwardsample.model.bean.LoginBean;
+import com.bw.forwardsample.model.bean.ProductBean;
+import com.bw.forwardsample.model.bean.TestBean;
 
 import io.reactivex.Observable;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
 
@@ -24,4 +25,8 @@ public interface Api {
 
     @GET("http://blog.zhaoliang5156.cn/api/student/clazzstudent.json")
     Observable<TestBean> testGet();
+
+    //查询购物车
+    @GET("small/order/verify/v1/findShoppingCart")
+    Observable<CartBean> getCartData(@Header("userId") String userId, @Header("sessionId") String sessionId);
 }

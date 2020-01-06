@@ -1,4 +1,4 @@
-package com.bw.forwardsample.bean;
+package com.bw.forwardsample.model.bean;
 
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;

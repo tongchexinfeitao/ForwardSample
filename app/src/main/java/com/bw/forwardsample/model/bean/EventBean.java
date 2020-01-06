@@ -1,4 +1,4 @@
-package com.bw.forwardsample.bean;
+package com.bw.forwardsample.model.bean;
 
 public class EventBean {
     private String name;

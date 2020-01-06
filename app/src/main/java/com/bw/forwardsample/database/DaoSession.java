@@ -8,7 +8,7 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
-import com.bw.forwardsample.bean.StudentBean;
+import com.bw.forwardsample.model.bean.StudentBean;
 
 import com.bw.forwardsample.database.StudentBeanDao;
 
