@@ -73,44 +73,40 @@ public class CartAdapter extends BaseExpandableListAdapter {
             sellerViewHolder = (SellerViewHolder) convertView.getTag();
         }
 
-        //拿到商家数据
-        CartBean.ResultBean resultBean = sellerList.get(groupPosition);
-
-        //绑定数据
-        sellerViewHolder.mSellerNameTv.setText(resultBean.getCategoryName());
-
-        // TODO: 2020/1/7 遍历当前商家下的所有商品，看看是否是全选状态
-        //拿到第 groupPosition 位置的商家
+        //当前的商家bean
         CartBean.ResultBean sellerBean = sellerList.get(groupPosition);
-        //拿到当前商家下的所有商品
+        //绑定商家名字
+        sellerViewHolder.mSellerNameTv.setText(sellerBean.getCategoryName());
+
+        //拿到所有商品
         List<CartBean.ResultBean.ShoppingCartListBean> shoppingCartList = sellerBean.getShoppingCartList();
-        //默认商家是选中的
+
+        //假设商家是选中状态
         boolean sellerIsChecked = true;
-        //遍历所有商品，如果有一个没选中，说明商家不应该被选中
+
+        //遍历所有商品，计算当前商家选中状态
         for (int i = 0; i < shoppingCartList.size(); i++) {
-            //拿到第 i 个商品
             CartBean.ResultBean.ShoppingCartListBean shoppingCartListBean = shoppingCartList.get(i);
-            //只要发现一个商品不是选中状态，那么就商家是未选中状态，然后直接结束遍历
+            //只要有一个商品没选中，商家的状态就应该是false
             if (shoppingCartListBean.isChecked() == false) {
                 sellerIsChecked = false;
+                //终止循环
                 break;
             }
         }
-        // TODO: 2020/1/7 给商家的checkbox绑定数据
+        //给商家的checkbox赋值
         sellerViewHolder.mSellerCb.setChecked(sellerIsChecked);
 
-        // TODO: 2020/1/7 点击商家的checkbox
+        //给商家的checkbox设置点击监听
         boolean finalSellerIsChecked = sellerIsChecked;
         sellerViewHolder.mSellerCb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //获取点击前商家的状态
+                // TODO: 2020/1/7 1、 拿到商家的状态  2、状态置反 3、将置反后的状态设置给所有的商品 4、刷新适配器
+                //商家状态
                 boolean currentIsChecked = finalSellerIsChecked;
-
-                //取反商家的状态
+                //置反
                 currentIsChecked = !currentIsChecked;
-
-                //遍历当前商家的所有商品，将取反后的商家的状态设置给商品
                 for (int i = 0; i < shoppingCartList.size(); i++) {
                     shoppingCartList.get(i).setChecked(currentIsChecked);
                 }
@@ -133,29 +129,26 @@ public class CartAdapter extends BaseExpandableListAdapter {
             commodityHolder = (CommodityHolder) convertView.getTag();
         }
 
-        //拿到商品数据
+        //当前位置的商品bean
         CartBean.ResultBean.ShoppingCartListBean shoppingCartListBean = sellerList.get(groupPosition).getShoppingCartList().get(childPosition);
-        //商品名字绑定数据
+
+        //绑定数据
         commodityHolder.mProductTitleNameTv.setText(shoppingCartListBean.getCommodityName());
-        //商品价格绑定数据
         commodityHolder.mProductPriceTv.setText("￥" + shoppingCartListBean.getPrice());
-        //商品图片绑定数据
-        Glide.with(commodityHolder.mProductIconIv)
-                .load(shoppingCartListBean.getPic())
-                .into(commodityHolder.mProductIconIv);
-
-        // TODO: 2020/1/7   商品checkbox绑定数据
+        Glide.with(commodityHolder.mProductIconIv).load(shoppingCartListBean.getPic()).into(commodityHolder.mProductIconIv);
+        //给checkbox赋值
         commodityHolder.mChildCb.setChecked(shoppingCartListBean.isChecked());
-
-        // TODO: 2020/1/7 这是商品checkbox的点击监听吧
+        //给checkbox设置点击事件
         commodityHolder.mChildCb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                shoppingCartListBean.setChecked(!shoppingCartListBean.isChecked());
+                // TODO: 2020/1/7 注意：点击监听中，不允许操作checkbox
+                // TODO: 2020/1/7 1、获取bean类中的状态值 2、置反  3、设置给bean 4、然后刷新适配器
+                boolean checked = shoppingCartListBean.isChecked();
+                shoppingCartListBean.setChecked(!checked);
                 notifyDataSetChanged();
             }
         });
-
         return convertView;
     }
 
@@ -190,53 +183,5 @@ public class CartAdapter extends BaseExpandableListAdapter {
         CommodityHolder(View view) {
             ButterKnife.bind(this, view);
         }
-    }
-
-
-    //计算总价
-    public float calculateTotalPrice() {
-        float totalPrice = 200;
-        //遍历每一个商家
-        for (int i = 0; i < sellerList.size(); i++) {
-            //获取到第 i 个商家
-            CartBean.ResultBean sellerBean = sellerList.get(i);
-            //拿到第 i 个商家下的所有商品集合
-            List<CartBean.ResultBean.ShoppingCartListBean> shoppingCartList = sellerBean.getShoppingCartList();
-            //遍历第 i 个商家下的所有的商品
-            for (int j = 0; j < shoppingCartList.size(); j++) {
-                //拿到第 j 个商品
-                CartBean.ResultBean.ShoppingCartListBean shoppingCartListBean = shoppingCartList.get(j);
-                //如果当前商品是选中状态，才去计算总价
-                if (shoppingCartListBean.isChecked()) {
-                    //总价累计
-                    totalPrice += shoppingCartListBean.getPrice() * shoppingCartListBean.getCount();
-                }
-            }
-        }
-        return totalPrice;
-    }
-
-
-    //计算总价
-    public float calculateTotalNum() {
-        float totalNum = 200;
-        //遍历每一个商家
-        for (int i = 0; i < sellerList.size(); i++) {
-            //获取到第 i 个商家
-            CartBean.ResultBean sellerBean = sellerList.get(i);
-            //拿到第 i 个商家下的所有商品集合
-            List<CartBean.ResultBean.ShoppingCartListBean> shoppingCartList = sellerBean.getShoppingCartList();
-            //遍历第 i 个商家下的所有的商品
-            for (int j = 0; j < shoppingCartList.size(); j++) {
-                //拿到第 j 个商品
-                CartBean.ResultBean.ShoppingCartListBean shoppingCartListBean = shoppingCartList.get(j);
-                //如果当前商品是选中状态，才去计算总价
-                if (shoppingCartListBean.isChecked()) {
-                    //总价累计
-                    totalNum += shoppingCartListBean.getCount();
-                }
-            }
-        }
-        return totalNum;
     }
 }
