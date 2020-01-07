@@ -111,6 +111,11 @@ public class CartAdapter extends BaseExpandableListAdapter {
                     shoppingCartList.get(i).setChecked(currentIsChecked);
                 }
                 notifyDataSetChanged();
+
+                //通知外界我被点击了
+                if (onCartClickListener != null) {
+                    onCartClickListener.onCartClick();
+                }
             }
         });
 
@@ -147,6 +152,11 @@ public class CartAdapter extends BaseExpandableListAdapter {
                 boolean checked = shoppingCartListBean.isChecked();
                 shoppingCartListBean.setChecked(!checked);
                 notifyDataSetChanged();
+
+                //通知外界我被点击了
+                if (onCartClickListener != null) {
+                    onCartClickListener.onCartClick();
+                }
             }
         });
         return convertView;
@@ -183,5 +193,80 @@ public class CartAdapter extends BaseExpandableListAdapter {
         CommodityHolder(View view) {
             ButterKnife.bind(this, view);
         }
+    }
+
+    public float calculateTotalPrice() {
+        float totalPrice = 0;
+        //遍历所有的商家
+        for (int i = 0; i < sellerList.size(); i++) {
+            CartBean.ResultBean resultBean = sellerList.get(i);
+            List<CartBean.ResultBean.ShoppingCartListBean> shoppingCartList = resultBean.getShoppingCartList();
+            for (int j = 0; j < shoppingCartList.size(); j++) {
+                CartBean.ResultBean.ShoppingCartListBean shoppingCartListBean = shoppingCartList.get(j);
+                if (shoppingCartListBean.isChecked()) {
+                    totalPrice += shoppingCartListBean.getPrice() * shoppingCartListBean.getCount();
+                }
+            }
+        }
+        return totalPrice;
+    }
+
+    public int calculateTotalNum() {
+        int totalNum = 0;
+        //遍历所有的商家
+        for (int i = 0; i < sellerList.size(); i++) {
+            CartBean.ResultBean resultBean = sellerList.get(i);
+            List<CartBean.ResultBean.ShoppingCartListBean> shoppingCartList = resultBean.getShoppingCartList();
+            for (int j = 0; j < shoppingCartList.size(); j++) {
+                CartBean.ResultBean.ShoppingCartListBean shoppingCartListBean = shoppingCartList.get(j);
+                if (shoppingCartListBean.isChecked()) {
+                    totalNum += shoppingCartListBean.getCount();
+                }
+            }
+        }
+        return totalNum;
+    }
+
+    public boolean calculateIsAllChecked() {
+        boolean IsAllChecked = true;
+        //遍历所有的商家
+        for (int i = 0; i < sellerList.size(); i++) {
+            CartBean.ResultBean resultBean = sellerList.get(i);
+            List<CartBean.ResultBean.ShoppingCartListBean> shoppingCartList = resultBean.getShoppingCartList();
+            for (int j = 0; j < shoppingCartList.size(); j++) {
+                CartBean.ResultBean.ShoppingCartListBean shoppingCartListBean = shoppingCartList.get(j);
+                if (shoppingCartListBean.isChecked() == false) {
+                    IsAllChecked = false;
+                }
+            }
+        }
+        return IsAllChecked;
+    }
+
+
+    //修改所有的商品状态
+    public void changeAllCommodityStatus(boolean isChecked) {
+        //遍历所有的商家
+        for (int i = 0; i < sellerList.size(); i++) {
+            CartBean.ResultBean resultBean = sellerList.get(i);
+            List<CartBean.ResultBean.ShoppingCartListBean> shoppingCartList = resultBean.getShoppingCartList();
+            //遍历所有的商品
+            for (int j = 0; j < shoppingCartList.size(); j++) {
+                CartBean.ResultBean.ShoppingCartListBean shoppingCartListBean = shoppingCartList.get(j);
+                shoppingCartListBean.setChecked(isChecked);
+            }
+        }
+        notifyDataSetChanged();
+    }
+
+
+    OnCartClickListener onCartClickListener;
+
+    public void setOnCartClickListener(OnCartClickListener onCartClickListener) {
+        this.onCartClickListener = onCartClickListener;
+    }
+
+    public interface OnCartClickListener {
+        void onCartClick();
     }
 }
