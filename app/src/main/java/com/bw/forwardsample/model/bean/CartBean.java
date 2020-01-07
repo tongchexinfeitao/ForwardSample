@@ -82,6 +82,16 @@ public class CartBean {
             private int count;
             private String pic;
             private int price;
+            //商品的选中状态
+            private boolean isChecked;
+
+            public boolean isChecked() {
+                return isChecked;
+            }
+
+            public void setChecked(boolean checked) {
+                isChecked = checked;
+            }
 
             public int getCommodityId() {
                 return commodityId;

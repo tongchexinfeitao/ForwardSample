@@ -79,6 +79,45 @@ public class CartAdapter extends BaseExpandableListAdapter {
         //绑定数据
         sellerViewHolder.mSellerNameTv.setText(resultBean.getCategoryName());
 
+        // TODO: 2020/1/7 遍历当前商家下的所有商品，看看是否是全选状态
+        //拿到第 groupPosition 位置的商家
+        CartBean.ResultBean sellerBean = sellerList.get(groupPosition);
+        //拿到当前商家下的所有商品
+        List<CartBean.ResultBean.ShoppingCartListBean> shoppingCartList = sellerBean.getShoppingCartList();
+        //默认商家是选中的
+        boolean sellerIsChecked = true;
+        //遍历所有商品，如果有一个没选中，说明商家不应该被选中
+        for (int i = 0; i < shoppingCartList.size(); i++) {
+            //拿到第 i 个商品
+            CartBean.ResultBean.ShoppingCartListBean shoppingCartListBean = shoppingCartList.get(i);
+            //只要发现一个商品不是选中状态，那么就商家是未选中状态，然后直接结束遍历
+            if (shoppingCartListBean.isChecked() == false) {
+                sellerIsChecked = false;
+                break;
+            }
+        }
+        // TODO: 2020/1/7 给商家的checkbox绑定数据
+        sellerViewHolder.mSellerCb.setChecked(sellerIsChecked);
+
+        // TODO: 2020/1/7 点击商家的checkbox
+        boolean finalSellerIsChecked = sellerIsChecked;
+        sellerViewHolder.mSellerCb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //获取点击前商家的状态
+                boolean currentIsChecked = finalSellerIsChecked;
+
+                //取反商家的状态
+                currentIsChecked = !currentIsChecked;
+
+                //遍历当前商家的所有商品，将取反后的商家的状态设置给商品
+                for (int i = 0; i < shoppingCartList.size(); i++) {
+                    shoppingCartList.get(i).setChecked(currentIsChecked);
+                }
+                notifyDataSetChanged();
+            }
+        });
+
         return convertView;
     }
 
@@ -96,11 +135,27 @@ public class CartAdapter extends BaseExpandableListAdapter {
 
         //拿到商品数据
         CartBean.ResultBean.ShoppingCartListBean shoppingCartListBean = sellerList.get(groupPosition).getShoppingCartList().get(childPosition);
+        //商品名字绑定数据
         commodityHolder.mProductTitleNameTv.setText(shoppingCartListBean.getCommodityName());
+        //商品价格绑定数据
         commodityHolder.mProductPriceTv.setText("￥" + shoppingCartListBean.getPrice());
+        //商品图片绑定数据
         Glide.with(commodityHolder.mProductIconIv)
                 .load(shoppingCartListBean.getPic())
                 .into(commodityHolder.mProductIconIv);
+
+        // TODO: 2020/1/7   商品checkbox绑定数据
+        commodityHolder.mChildCb.setChecked(shoppingCartListBean.isChecked());
+
+        // TODO: 2020/1/7 这是商品checkbox的点击监听吧
+        commodityHolder.mChildCb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                shoppingCartListBean.setChecked(!shoppingCartListBean.isChecked());
+                notifyDataSetChanged();
+            }
+        });
+
         return convertView;
     }
 
@@ -135,5 +190,53 @@ public class CartAdapter extends BaseExpandableListAdapter {
         CommodityHolder(View view) {
             ButterKnife.bind(this, view);
         }
+    }
+
+
+    //计算总价
+    public float calculateTotalPrice() {
+        float totalPrice = 200;
+        //遍历每一个商家
+        for (int i = 0; i < sellerList.size(); i++) {
+            //获取到第 i 个商家
+            CartBean.ResultBean sellerBean = sellerList.get(i);
+            //拿到第 i 个商家下的所有商品集合
+            List<CartBean.ResultBean.ShoppingCartListBean> shoppingCartList = sellerBean.getShoppingCartList();
+            //遍历第 i 个商家下的所有的商品
+            for (int j = 0; j < shoppingCartList.size(); j++) {
+                //拿到第 j 个商品
+                CartBean.ResultBean.ShoppingCartListBean shoppingCartListBean = shoppingCartList.get(j);
+                //如果当前商品是选中状态，才去计算总价
+                if (shoppingCartListBean.isChecked()) {
+                    //总价累计
+                    totalPrice += shoppingCartListBean.getPrice() * shoppingCartListBean.getCount();
+                }
+            }
+        }
+        return totalPrice;
+    }
+
+
+    //计算总价
+    public float calculateTotalNum() {
+        float totalNum = 200;
+        //遍历每一个商家
+        for (int i = 0; i < sellerList.size(); i++) {
+            //获取到第 i 个商家
+            CartBean.ResultBean sellerBean = sellerList.get(i);
+            //拿到第 i 个商家下的所有商品集合
+            List<CartBean.ResultBean.ShoppingCartListBean> shoppingCartList = sellerBean.getShoppingCartList();
+            //遍历第 i 个商家下的所有的商品
+            for (int j = 0; j < shoppingCartList.size(); j++) {
+                //拿到第 j 个商品
+                CartBean.ResultBean.ShoppingCartListBean shoppingCartListBean = shoppingCartList.get(j);
+                //如果当前商品是选中状态，才去计算总价
+                if (shoppingCartListBean.isChecked()) {
+                    //总价累计
+                    totalNum += shoppingCartListBean.getCount();
+                }
+            }
+        }
+        return totalNum;
     }
 }
