@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bw.forwardsample.R;
 import com.bw.forwardsample.model.bean.CartBean;
+import com.bw.forwardsample.view.widget.MyAddSubView;
 
 import java.util.List;
 
@@ -159,6 +160,22 @@ public class CartAdapter extends BaseExpandableListAdapter {
                 }
             }
         });
+
+        // TODO: 2020/1/8 给加减器绑定数据
+        commodityHolder.myAddSubView.setNum(shoppingCartListBean.getCount());
+        // TODO: 2020/1/8 给加减器设置数量改变监听
+        commodityHolder.myAddSubView.setOnNumChangeListener(new MyAddSubView.onNumChangeListener() {
+            @Override
+            public void onNumChange(int num) {
+                // TODO: 2020/1/8 1、将数量设置给商品bean类 2、刷新适配器 3、通知外部重新计算价格、数量
+                shoppingCartListBean.setCount(num);
+                notifyDataSetChanged();
+                //通知外界我被点击了,要重新计算总价
+                if (onCartClickListener != null) {
+                    onCartClickListener.onCartClick();
+                }
+            }
+        });
         return convertView;
     }
 
@@ -189,6 +206,9 @@ public class CartAdapter extends BaseExpandableListAdapter {
         TextView mProductTitleNameTv;
         @BindView(R.id.product_price_tv)
         TextView mProductPriceTv;
+        // TODO: 2020/1/8 新添加了一个加减器
+        @BindView(R.id.add_sub_view)
+        MyAddSubView myAddSubView;
 
         CommodityHolder(View view) {
             ButterKnife.bind(this, view);

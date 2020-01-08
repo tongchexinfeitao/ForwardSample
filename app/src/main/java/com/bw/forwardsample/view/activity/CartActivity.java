@@ -77,6 +77,7 @@ public class CartActivity extends BaseActivity<CartPresenter> implements ICartCo
         for (int i = 0; i < sellerList.size(); i++) {
             mLv.expandGroup(i);
         }
+
     }
 
     @Override
@@ -100,7 +101,13 @@ public class CartActivity extends BaseActivity<CartPresenter> implements ICartCo
                     boolean b = cartAdapter.calculateIsAllChecked();
                     b = !b;
                     cartAdapter.changeAllCommodityStatus(b);
+
+                    // TODO: 2020/1/8 重新计算总价 
+                    mTvCartTotalPrice.setText("总价:￥" + cartAdapter.calculateTotalPrice());
+                    mBtnCartPay.setText("去结算(" + cartAdapter.calculateTotalNum() + ")");
+                    mCbCartAllSelect.setChecked(cartAdapter.calculateIsAllChecked());
                 }
+
                 break;
             case R.id.btn_cart_pay:
 
