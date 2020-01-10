@@ -2,6 +2,7 @@ package com.bw.forwardsample;
 
 import com.bw.forwardsample.model.bean.CartBean;
 import com.bw.forwardsample.model.bean.LoginBean;
+import com.bw.forwardsample.model.bean.OrderFormBean;
 import com.bw.forwardsample.model.bean.ProductBean;
 import com.bw.forwardsample.model.bean.TestBean;
 
@@ -29,4 +30,12 @@ public interface Api {
     //查询购物车
     @GET("small/order/verify/v1/findShoppingCart")
     Observable<CartBean> getCartData(@Header("userId") String userId, @Header("sessionId") String sessionId);
+
+    //查询购物车
+    @GET("small/order/verify/v1/findOrderListByStatus")
+    Observable<OrderFormBean> getOrderFormData(@Header("userId") String userId,
+                                               @Header("sessionId") String sessionId,
+                                               @Query("page") int page,
+                                               @Query("count") int count,
+                                               @Query("status") int status);
 }

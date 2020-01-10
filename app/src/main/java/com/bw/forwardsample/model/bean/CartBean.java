@@ -81,7 +81,7 @@ public class CartBean {
             private String commodityName;
             private int count;
             private String pic;
-            private int price;
+            private double price;
             //商品的选中状态
             private boolean isChecked;
 
@@ -125,11 +125,11 @@ public class CartBean {
                 this.pic = pic;
             }
 
-            public int getPrice() {
+            public double getPrice() {
                 return price;
             }
 
-            public void setPrice(int price) {
+            public void setPrice(double price) {
                 this.price = price;
             }
         }
