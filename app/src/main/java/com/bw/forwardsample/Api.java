@@ -4,6 +4,7 @@ import com.bw.forwardsample.model.bean.CartBean;
 import com.bw.forwardsample.model.bean.LoginBean;
 import com.bw.forwardsample.model.bean.OrderFormBean;
 import com.bw.forwardsample.model.bean.ProductBean;
+import com.bw.forwardsample.model.bean.RegisterBean;
 import com.bw.forwardsample.model.bean.TestBean;
 
 import io.reactivex.Observable;
@@ -19,6 +20,10 @@ public interface Api {
     @FormUrlEncoded
     @POST("small/user/v1/login")
     Observable<LoginBean> login(@Field("phone") String phone, @Field("pwd") String pwd);
+
+    @FormUrlEncoded
+    @POST("small/user/v1/register")
+    Observable<RegisterBean> register(@Field("phone") String phone, @Field("pwd") String pwd);
 
 
     @GET("small/commodity/v1/findCommodityByKeyword")
